@@ -1,0 +1,10 @@
+
+http://localhost:8081/MySpringMVCFinalWeb/mvc/dispatch?controller=login&method=UserLoginDb&userId=admin&password=admin
+
+
+http://localhost:8081/analysisAdd/mvc/dispatch?controller=system&method=selectDicdataByTypeOrName&DIC_TYPE_ID=1218
+
+http://localhost:8081/analysisAdd/mvc/dispatch?controller=system&method=selectDicdataByTypeOrName&DIC_NAME=BD_FWQZ_ZFLX
+
+http://localhost:8081/analysisAdd/mvc/dispatch?controller=rktj&method=getRktj&type=kclr,lset&zzjgdm=520500000000
+http://localhost:8081/analysisAdd/mvc/dispatch?controller=rktj&method=getRktj&type=&zzjgdm=

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="log">
+
+    <!-- 查询日志数量 -->
+	<select id="selectLogListCount" parameterType="java.util.HashMap" resultType="String">
+		select count(*) total
+         from t_system_log_new t
+         where 1=1
+         <if test="btime!=null and btime!=''">
+			and t.usedate >= to_date(#{btime},'yyyy-mm-dd hh24:mi:ss')
+	  	 </if>
+         <if test="btime!=null and btime!=''">
+         	<![CDATA[
+				and t.usedate <= to_date(#{etime},'yyyy-mm-dd hh24:mi:ss')
+			]]>
+	  	  </if>
+         	<if test="optiontype!=null and optiontype!=''">
+				and t.optiontype = #{optiontype}
+	  		</if>
+	  		<if test="modulename!=null and modulename!=''">
+					and t.usemoudle = #{modulename}
+				  </if>
+         <if test="userid!=null and userid!=''">
+			and t.userid = #{userid}
+	  	 </if>
+	</select>
+
+	<!-- 查询日志列表 -->
+	<select id="selectLogList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select * from(select a.*,rownum as rn from (
+		select t5.*,
+		       (select zzjgmc from t_zzjg t3 where t3.zzjgdm = t5.sszzjgdm) sszzjgmc
+		  from (select t.userid,
+		               (select username from t_user t1 where t.userid = t1.userid) userxm,
+		               (select zzjgdm from t_user t2 where t.userid = t2.userid) sszzjgdm,
+		               to_char(usedate, 'yyyy-mm-dd hh24:mi:ss') usedate,
+		               userip,
+		               optiontype,
+		               (select mc from d_dl_type t4 where t.optiontype = t4.dm) optiontypemc,
+		               usemoudle,
+		               optiondata
+		          from t_system_log_new t
+		          where 1=1
+		          <if test="btime!=null and btime!=''">
+					and t.usedate >= to_date(#{btime},'yyyy-mm-dd hh24:mi:ss')
+				  </if>
+		          <if test="btime!=null and btime!=''">
+		          	<![CDATA[
+					and t.usedate <= to_date(#{etime},'yyyy-mm-dd hh24:mi:ss')
+					]]>
+				  </if>
+		          <if test="optiontype!=null and optiontype!=''">
+					and t.optiontype = #{optiontype}
+				  </if>
+				  <if test="modulename!=null and modulename!=''">
+					and t.usemoudle = #{modulename}
+				  </if>
+		          <if test="userid!=null and userid!=''">
+					and t.userid = #{userid}
+				  </if>
+		           order by usedate) t5
+		          )a)b where rn between #{begin} and #{end}
+	</select>
+
+	<!-- 插入日志记录 -->
+	<insert id="addLog" parameterType="com.founder.bussiness.log.entity.LogEntity">
+		insert into t_system_log_new(userxm,userid,sszzjg,usemoudle,usedate,usefunction,userip,optiontype,optiondata,remark,domainid,id)
+			values(#{userxm},#{userid},#{sszzjg},#{usemoudle},sysdate(),#{usefunction},#{userip},#{optiontype},#{optiondata},#{remark},#{domainid},#{id})
+	</insert>
+
+	<!-- 操作类型字典 -->
+	<select id="selectOptionTypeList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select * from d_dl_type
+	</select>
+
+	<!-- 模块列表 -->
+	<select id="selectModuleList" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select * from t_module where domainid=2
+	</select>
+
+</mapper>

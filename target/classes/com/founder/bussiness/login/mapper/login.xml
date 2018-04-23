@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="login">
+
+    <!-- 验证用户 -->
+	<select id="UserLoginDb" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select t.* from T_USER t where t.userid=#{userId} and t.password=#{password}
+	</select>
+
+    <!-- 统计用户数量 -->
+    <select id="QueryUserCount" parameterType="java.util.HashMap" resultType="String">
+        select count(*) total from T_USER t where 1=1
+        <if test="userid!=null and userid!='' ">
+            and t.userid like CONCAT('%',#{userid},'%')
+        </if>
+    </select>
+
+    <!-- 查询用户 -->
+    <select id="QueryUser" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select t.* from T_USER t where 1=1
+        <if test="userid!=null and userid!='' ">
+            and t.userid like CONCAT('%',#{userid},'%')
+        </if>
+        limit #{start},#{limit}
+    </select>
+
+    <!-- 添加用户 -->
+    <insert id="AddUser" parameterType="java.util.HashMap">
+        insert into t_user(userid,username,password) values(#{userid},#{username},#{password})
+    </insert>
+
+    <!-- 更新用户 -->
+    <update id="UppUser" parameterType="java.util.HashMap">
+        update t_user t set t.username=#{userid},t.password=#{password} where userid = #{userid}
+    </update>
+
+    <!-- 删除用户 -->
+    <delete id="DelUser" parameterType="java.util.HashMap">
+        delete from t_user where userid=#{userid}
+    </delete>
+
+
+</mapper>

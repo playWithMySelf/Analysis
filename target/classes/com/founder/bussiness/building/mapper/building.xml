@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="building">
+    <!-- 根据字典代码或名称获取字典数据 -->
+    <select id="selectDicdataByTypeOrName" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select * from sys_dicdata where 1=1
+        <if test="DIC_TYPE_ID!=null and DIC_TYPE_ID!=''">
+            and DIC_TYPE_ID = #{DIC_TYPE_ID}
+        </if>
+        <if test="DIC_NAME!=null and DIC_NAME!=''">
+            and DIC_TYPE_ID = (SELECT TYPE_ID FROM sys_dictype WHERE TYPE_ZDBM=#{DIC_NAME})
+        </if>
+        order by DIC_CODE
+    </select>
+
+
+    <select id="selectAllBuildingInfo" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select
+        <if test="type!=null and type!=''">
+            ${type},
+        </if>
+        <if test="type==null or type==''">
+            t1.*,
+        </if>
+        t2.*
+        from t_tjfx_fwtj t1
+        join (select zzjgdm orgId,
+        zzjgmc orgName,
+        ssjgdm parentOrgId,
+        (select zzjgmc from sys_zzjg s1 where t1.zzjgdm = s1.zzjgdm) parentOrgName,
+        zzjglx - 10 lev,
+        decode(ssjgdm, '', 'true', 'false') isRoot,
+        decode((select count(*) as co
+        from sys_zzjg s3
+        where t1.zzjgdm = s3.ssjgdm),
+        0,
+        'true',
+        'false') isLeaf
+        from sys_zzjg t1
+        <if test="zzjgdm!=null and zzjgdm!=''">
+            start with zzjgdm = #{zzjgdm}
+            connect by prior zzjgdm = ssjgdm
+        </if>
+        ) t2 on t1.orgid = t2.orgid
+        order by lev
+    </select>
+
+
+</mapper>

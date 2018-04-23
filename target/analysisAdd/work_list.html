@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh_CN" data-ng-app="WebApp">
+    <head>
+        <title data-ng-bind="统计"></title>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+        <meta content="" name="description"/>
+        <meta content="" name="author"/>
+
+        <link href="resources/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="resources/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet"
+              type="text/css"/>
+        <link href="resources/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="resources/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet"
+              type="text/css"/>
+        <link href="resources/global/plugins/angularjs/plugins/angular-loading-bar/loading-bar.min.css" rel="stylesheet"
+              type="text/css"/>
+
+        <link href="resources/global/plugins/angularjs/plugins/ui-select/select.min.css" rel="stylesheet"
+              type="text/css"/>
+        <link href="resources/global/plugins/jcrop/css/jquery.Jcrop.min.css" rel="stylesheet" type="text/css"/>
+        <!-- END GLOBAL MANDATORY STYLES -->
+
+        <!-- BEGIN THEME STYLES -->
+        <!-- DOC: To use 'rounded corners' style just load 'components-rounded.css' stylesheet instead of 'components.css' in the below style tag -->
+        <link href="resources/global/css/components-md.min.css" id="style_components" rel="stylesheet" type="text/css"/>
+        <link href="resources/global/css/plugins-md.min.css" id="style_plugins" rel="stylesheet" type="text/css"/>
+
+        <link href="resources/layouts/layout4/css/layout.css" rel="stylesheet" type="text/css"/>
+        <link href="resources/layouts/layout4/css/themes/default.css" rel="stylesheet" type="text/css"
+              id="style_color"/>
+        <link href="resources/layouts/layout4/css/custom.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body ng-controller="WorkListCtrl">
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-puzzle"></i>
+                    <span class="caption-subject bold font-yellow-casablanca">统计分析</span>
+                    <span class="caption-helper">工作进展情况分析报表</span>
+                </div>
+                <div class="inputs">
+                    <div class="portlet-input input-inline">
+                        <div class="input-group input-xlarge">
+                            <input class="form-control input-circle-left" placeholder="xxxx-xx-xx" type="text"
+                                   ng-model="start" bs-datepicker data-date-format="yyyy-MM-dd" data-max-date="today"
+                                   data-date-type="string">
+                            <span class="input-group-addon"> 至 </span>
+                            <input class="form-control" placeholder="xxxx-xx-xx" type="text" ng-model="end"
+                                   bs-datepicker data-date-format="yyyy-MM-dd" data-max-date="today"
+                                   data-date-type="string">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" ng-click="load()">查询</button>
+                            </span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-circle-right btn-primary" ng-click="download()">下载</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-scrollable">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center wid160px" rowspan="2">单位</th>
+                                <th class="text-center" colspan="3">标准地址</th>
+                                <th class="text-center" colspan="3">实有人口</th>
+                                <th class="text-center" colspan="3">实有房屋</th>
+                                <th class="text-center" colspan="3">实有单位</th>
+                            </tr>
+                            <tr>
+                                <td class="text-center wid60px">新增</td>
+                                <td class="text-center wid60px">修改</td>
+                                <td class="text-center wid60px">注销</td>
+                                <td class="text-center wid60px">新增</td>
+                                <td class="text-center wid60px">修改</td>
+                                <td class="text-center wid60px">注销</td>
+                                <td class="text-center wid60px">新增</td>
+                                <td class="text-center wid60px">修改</td>
+                                <td class="text-center wid60px">注销</td>
+                                <td class="text-center wid60px">新增</td>
+                                <td class="text-center wid60px">修改</td>
+                                <td class="text-center wid60px">注销</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in list">
+                                <td ng-click="expandAndHide($index, item)" style="cursor: pointer;">
+                                    <span style="margin-right: {{item.level*20}}px;"></span>
+                                    <span class="font-blue margin-right-10">
+                                        <i class="fa {{item.isLeaf ? 'fa-genderless' : item.expanded ? 'fa-chevron-down' : 'fa-chevron-right'}}"></i>
+                                    </span>
+                                    {{item.name}}
+                                </td>
+                                <td class="text-center">{{item.values['BZDZXZ']}}</td>
+                                <td class="text-center">{{item.values['BZDZXG']}}</td>
+                                <td class="text-center">{{item.values['BZDZZX']}}</td>
+                                <td class="text-center">{{item.values['SYRKXZ']}}</td>
+                                <td class="text-center">{{item.values['SYRKXG']}}</td>
+                                <td class="text-center">{{item.values['SYRKZX']}}</td>
+                                <td class="text-center">{{item.values['SYFWXZ']}}</td>
+                                <td class="text-center">{{item.values['SYFWXG']}}</td>
+                                <td class="text-center">{{item.values['SYFWZX']}}</td>
+                                <td class="text-center">{{item.values['SYDWXZ']}}</td>
+                                <td class="text-center">{{item.values['SYDWXG']}}</td>
+                                <td class="text-center">{{item.values['SYDWZX']}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--[if lt IE 9]>
+        <script src="resources/global/plugins/respond.min.js"></script>
+        <script src="resources/global/plugins/excanvas.min.js"></script>
+        <script src="resources/global/plugins/ie8.fix.min.js"></script>
+        <![endif]-->
+        <script src="resources/global/plugins/jquery.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/js.cookie.min.js" type="text/javascript"></script>
+        <!-- END CORE JQUERY PLUGINS -->
+
+        <!-- BEGIN BOOTSTRAP PLUGINS -->
+        <script src="resources/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/bootstrap-sessiontimeout/bootstrap-session-timeout.min.js"
+                type="text/javascript"></script>
+        <!-- END BOOTSTRAP PLUGINS -->
+
+        <!-- BEGIN CORE ANGULARJS PLUGINS -->
+        <script src="resources/global/plugins/angularjs/angular.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/angular-locale_zh-cn.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/angular-sanitize.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/angular-touch.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/plugins/angular-ui-router.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/plugins/ocLazyLoad.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/plugins/ui-bootstrap-tpls.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/angular-strap.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/angular-strap.tpl.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/plugins/angular-loading-bar/loading-bar.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/plugins/ui-select/select.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/angularjs/plugins/angular-bootstrap-switch.min.js"
+                type="text/javascript"></script>
+        <!-- END CORE ANGULARJS PLUGINS -->
+
+        <!-- BEGIN OTHER JAVASCRIPT PLUGINS -->
+        <script src="resources/global/plugins/jcrop/js/jquery.color.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/jquery-validation/js/jquery.validate.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/jquery-validation/js/additional-methods.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/jquery-validation/js/localization/messages_zh.min.js"
+                type="text/javascript"></script>
+        <script src="resources/global/plugins/jcrop/js/jquery.Jcrop.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/bootbox/bootbox.min.js" type="text/javascript"></script>
+        <script src="resources/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js"
+                type="text/javascript"></script>
+        <!-- END OTHER JAVASCRIPT PLUGINS -->
+
+        <!-- BEGIN APP LEVEL ANGULARJS SCRIPTS -->
+        <script src="js/main.js" type="text/javascript"></script>
+        <script src="js/ctrl/WorkListCtrl.js" type="text/javascript"></script>
+        <!-- END APP LEVEL ANGULARJS SCRIPTS -->
+    </body>
+</html>

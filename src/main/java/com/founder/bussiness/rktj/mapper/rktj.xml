@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rktj">
+
+	<!-- 人口类型统计 -->
+	<select id="getRktj" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select
+        <if test="type!=null and type!=''">
+            ${type},
+        </if>
+        <if test="type==null or type==''">
+            t1.*,
+        </if>
+        t2.*
+  from t_tjfx_rklxtj t1
+  join (select zzjgdm orgId,
+               zzjgmc orgName,
+               ssjgdm parentOrgId,
+               (select zzjgmc from sys_zzjg s1 where t1.zzjgdm = s1.zzjgdm) parentOrgName,
+               zzjglx - 10 lev,
+               decode(ssjgdm, '', 'true', 'false') isRoot,
+               decode((select count(*) as co
+                        from sys_zzjg s3
+                       where t1.zzjgdm = s3.ssjgdm),
+                      0,
+                      'true',
+                      'fasle') isLeaf
+          from sys_zzjg t1
+        <if test="zzjgdm!=null and zzjgdm!=''">
+            start with zzjgdm = #{zzjgdm}
+            connect by prior zzjgdm = ssjgdm
+        </if>
+         ) t2 on t1.orgid = t2.orgid order by t2.orgid
+    </select>
+
+    <!-- 单位统计 -->
+    <select id="getDwtj" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select
+        <if test="type!=null and type!=''">
+            ${type},
+        </if>
+        <if test="type==null or type==''">
+            t1.*,
+        </if>
+        t2.*
+        from t_tjfx_dwfwtj t1
+        join (select zzjgdm orgId,
+        zzjgmc orgName,
+        ssjgdm parentOrgId,
+        (select zzjgmc from sys_zzjg s1 where t1.zzjgdm = s1.zzjgdm) parentOrgName,
+        zzjglx - 10 lev,
+        decode(ssjgdm, '', 'true', 'false') isRoot,
+        decode((select count(*) as co
+        from sys_zzjg s3
+        where t1.zzjgdm = s3.ssjgdm),
+        0,
+        'true',
+        'fasle') isLeaf
+        from sys_zzjg t1
+        <if test="zzjgdm!=null and zzjgdm!=''">
+            start with zzjgdm = #{zzjgdm}
+            connect by prior zzjgdm = ssjgdm
+        </if>
+        ) t2 on t1.orgid = t2.orgid order by t2.orgid
+    </select>
+
+
+    <!-- 单位统计导出 -->
+    <select id="exportDwtj" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select zzjgmc,
+           ZDDWLX_D01,
+           ZDDWLX_D02,
+           ZDDWLX_D03,
+           ZDDWLX_D04,
+           ZDDWLX_D05,
+           ZDDWLX_D06,
+           ZDDWLX_D07,
+           ZDDWLX_D08,
+           ZDDWLX_D09,
+           ZDDWLX_D10,
+           ZDDWLX_D11,
+           DWLBDM_100,
+           DWLBDM_200,
+           DWLBDM_300,
+           DWLBDM_900
+      from (select zzjgdm, substr(sys_connect_by_path(zzjgmc, '/'), 2) zzjgmc
+              from sys_zzjg
+             start with zzjgdm = #{zzjgdm}
+            connect by prior zzjgdm = ssjgdm) a
+      join (select * from t_tjfx_dwfwtj t) b on a.zzjgdm = b.orgid
+     ORDER by zzjgmc
+    </select>
+
+    <!-- 人口统计导出 -->
+    <select id="exportRktj" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+            select ZZJGMC,ZFLX_KCLR,ZFLX_LSET,ZFLX_SYDX,ZFLX_PKJT,ZFLX_JGDX,ZFLX_JYZT,ZFLX_SKSW,ZFLX_XDRQ,ZFLX_SFRQ,ZFLX_JSBQ,ZFLX_XSRQ
+      from (select zzjgdm, substr(sys_connect_by_path(zzjgmc, '/'), 2) zzjgmc
+              from sys_zzjg
+             start with zzjgdm = #{zzjgdm}
+            connect by prior zzjgdm = ssjgdm) a
+      join (select * from t_tjfx_rklxtj t) b on a.zzjgdm = b.orgid
+     ORDER by zzjgmc
+    </select>
+
+    <!-- 房屋统计导出 -->
+    <select id="exportFwtj" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+                select ZZJGMC,SFWF_1,SFWF_0,FWYTDM_10,FWYTDM_20,FWYTDM_30,FWYTDM_40,FWYTDM_50,FWYTDM_60,FWYTDM_70,FWYTDM_80,FWYTDM_90,SFCZFW_1,SFCZFW_0
+          from (select zzjgdm, substr(sys_connect_by_path(zzjgmc, '/'), 2) zzjgmc
+                  from sys_zzjg
+                 start with zzjgdm = #{zzjgdm}
+                connect by prior zzjgdm = ssjgdm) a
+          join (select * from t_tjfx_fwtj t) b on a.zzjgdm = b.orgid
+         ORDER by zzjgmc
+    </select>
+
+</mapper>

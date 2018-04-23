@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="system">
+
+
+
+	<!-- 根据字典代码或名称获取字典数据 -->
+	<select id="selectDicdataByTypeOrName" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		select * from sys_dicdata where 1=1
+		<if test="DIC_TYPE_ID!=null and DIC_TYPE_ID!=''">
+            and DIC_TYPE_ID = #{DIC_TYPE_ID}
+        </if>
+        <if test="DIC_NAME!=null and DIC_NAME!=''">
+            and DIC_TYPE_ID = (SELECT TYPE_ID FROM sys_dictype WHERE TYPE_ZDBM=#{DIC_NAME})
+        </if>
+        <if test="DIC_LEVEL!=null and DIC_LEVEL!=''">
+            and DIC_LEVEL = #{DIC_LEVEL}
+        </if>
+    </select>
+
+</mapper>

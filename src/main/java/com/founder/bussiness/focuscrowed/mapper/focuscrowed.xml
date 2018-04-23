@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="focuscrowed">
+    <!-- 查询关注人群 -->
+    <select id="selectFocuscrowedLocation" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select t2.jzd_zbx, t2.jzd_zby, t1.XM, t1.zjhm,t1.id,t1.hjd_dzxz from SYRK_RKJBXXB t1, SYRK_RKXXZB t2
+        where t1.id = t2.ryid and t1.gzlxdm like concat(concat('%',#{gzrqlx}),'%') and ${ssdw} and t2.xt_zxbz='0'
+    </select>
+
+    <resultMap id="zzjgMap" type="java.util.HashMap">
+        <result property="zzjgdm" column="zzjgdm"/>
+        <result property="zzjgmc" column="zzjgmc"/>
+        <result property="bjzbz" column="bjzbz" jdbcType="CLOB" javaType="java.lang.String" typeHandler="com.founder.utils.OracleClobTypeHandler"></result>
+    </resultMap>
+
+    <select id="selectBjzbzByZzjgdm" parameterType="java.util.HashMap" resultMap="zzjgMap">
+        select bjzbz,zzjgdm,zzjgmc from SYS_ZZJG t where zzjgdm = #{zzjgdm}
+    </select>
+
+    <select id="selectZzjglx" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select zzjglx from sys_zzjg s1 where s1.zzjgdm=#{zzjgdm}
+    </select>
+
+    <select id="selectGzrqLx" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+        select dic_code, dic_name from SYS_DICDATA t where dic_type_id = (select type_id from sys_dictype where type_zdbm='BD_FWQZ_ZFLX')
+    </select>
+</mapper>

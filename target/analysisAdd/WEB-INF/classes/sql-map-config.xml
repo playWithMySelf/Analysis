@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<typeHandlers>
+	   <typeHandler  javaType="byte[]" jdbcType="BLOB" handler="org.apache.ibatis.type.BlobTypeHandler"/>
+	   <typeHandler  javaType="java.lang.String" jdbcType="CLOB" handler="org.apache.ibatis.type.ClobTypeHandler"/>
+	</typeHandlers>
+
+	<mappers>
+ 	 	<!-- 登陆 -->
+ 	 	<mapper resource="com/founder/bussiness/login/mapper/login.xml"/>
+ 	 	<!-- 日志 -->
+ 	 	<mapper resource="com/founder/bussiness/log/mapper/log.xml"/>
+        <!-- 系统操作 -->
+        <mapper resource="com/founder/bussiness/system/mapper/system.xml"/>
+        <!-- 人口统计 -->
+        <mapper resource="com/founder/bussiness/rktj/mapper/rktj.xml"/>
+        <!-- 房屋统计 -->
+        <mapper resource="com/founder/bussiness/building/mapper/building.xml"/>
+        <!-- 关注人群撒点 -->
+        <mapper resource="com/founder/bussiness/focuscrowed/mapper/focuscrowed.xml"/>
+	</mappers>
+
+</configuration>

@@ -1,0 +1,74 @@
+<!DOCTYPE html ><!--
+PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd" -->
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- <meta http-equiv="X-UA-Compatible" content="chrome=1"/> -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Cache-Control" content="max-age=7200000000" />
+	<meta http-equiv="Expires" content="Mon, 20 Jul 2088 23:00:00 GMT" />
+	<title>PGIS 地图</title>
+	<link rel="stylesheet" href="js/gzrq/lib/map/EzServerClient.min.css" type="text/css">
+	<link rel="stylesheet" href="js/gzrq/css/flat-ui.css" type="text/css">
+	<script type="text/javascript" src="js/gzrq/lib/map/assign.polyfill.js"></script>
+	<script type="text/javascript" src="js/gzrq/lib/map/EzMapAPI.js"></script>
+	<script type="text/javascript" src="js/gzrq/lib/map/EzServerClient.min.js"></script>
+	<!-- 以下是html5地图链接配置 -->
+	<style type="text/css">
+		.span3{width:220px;}
+		.ez-simple {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			background: #fff;
+			/* border-radius: 4px; */
+			box-shadow: 0 2px 7px rgba(0, 0, 0, .3);
+			padding: 5px 5px 4px 5px;
+			color: #5f6477;
+			cursor: pointer;
+		}
+
+		.ez-simple-td {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+
+		.ez-simple-td:hover {
+			color: #adb0bd;
+		}
+
+		.mapTd1 {
+			padding: 5px 10px 5px 10px;
+			border: 1px solid #cccccc;
+			background: #e2effc;
+		}
+
+		.mapTd2 {
+			padding: 5px 10px 5px 10px;
+			border-bottom: 1px solid #cccccc;
+			border-right: 1px solid #cccccc;
+			border-top: 1px solid #cccccc;
+		}
+	</style>
+</head>
+<body style="margin:0;padding:0;overflow:hidden;">
+<div id="map" style="margin:0 auto;"></div>
+<div style="position:absolute;top:60px;left:30px;" id="gzrqlxCon">
+
+</div>
+<div class="ez-simple">
+	<table cellspacing="0" cellpadding="0" border="0">
+		<tbody>
+		    <tr><td><table cellspacing="0" cellpadding="0" border="0">
+				<tbody><tr>
+					<td id="map_2" class="mapTd1" onclick="switchMapServerMap(2);">矢量地图</td>
+					<td id="map_1" class="mapTd2" onclick="switchMapServerMap(1);">影像地图</td>
+					<td id="map_0" class="mapTd2" onclick="switchMapServerMap(0);">省厅影像</td>
+				</tr></tbody></table></td></tr></tbody></table></div>
+<!-- jquery -->
+<script type="text/javascript" src="js/gzrq/lib/jquery-1.9.1.min.js"></script>
+</body>
+<script type="text/javascript" src="js/gzrq/lib/jquery.dropkick-1.0.0.js"></script>
+<script type="text/javascript" src="js/gzrq/lib/mapapp.js"></script>
+<script type="text/javascript" src="js/gzrq/lib/mapview.js"></script>
+</html>
